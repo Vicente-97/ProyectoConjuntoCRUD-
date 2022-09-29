@@ -1,10 +1,14 @@
 package com.jacaranda;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 
 public class DAOCar {
 
@@ -48,4 +52,42 @@ public void getCars() throws SQLException {
 //			return null;
 //		}
 //	}
+
+	public void addCar(int model_year, String model_auto, String car_make, boolean availability, double price, LocalDate entry_date, String id) throws SQLException, IOException {
+		String linea;
+		
+		Connection connection =  DriverManager.getConnection("jdbc:mysql://localhost:3306/concesionario", "toor", "toor");
+		
+		Statement st =connection.createStatement();
+		ResultSet resulSet =st.executeQuery("Select id from CAR_DATA where id= id;");
+		if(resulSet.getString(id).isEmpty()) {
+//			esta vacia??? Crealo
+			st.executeUpdate("INSERT INTO CAR_DATA (model_year, model_auto, car_make, availability, price, entry_date, id) values('', '', '', '', '', '', '');\n");
+		}else {
+			//VENTANA DE ERROR QUE YA EXISTE
+		}
+		
+		
+		while (resulSet.next()) {
+			System.out.println((resulSet.getString(1)+ " , " +
+			resulSet.getString(2)+ " , "+ resulSet.getString(3)+ " , "+ resulSet.getString(4)+" ,"+
+			resulSet.getString(5)+ resulSet.getString(6)+ "\n"));			
+						
+			}			
+	}
+	public boolean getUsers(String name, String pass) throws SQLException {
+		Connection connection = DriverManager.getConnection(
+				"jdbc:mysql://localhost:3306/concesionario?useSSL=false", "toor", "toor");
+		boolean bandera=false;
+		
+		Statement st = connection.createStatement();
+		ResultSet resultSet = st.executeQuery("select * from USERS where name="+name+"and pass="+pass);
+		if (resultSet.getString(name).isEmpty()) {
+//			Error no puede entrar, lo redirige a la pagina de error. <jsp:forwdard///
+		}else {
+//			Lo redirige a la pagina principal///
+			bandera=true;
+		}
+		return bandera;
+	}
 }
