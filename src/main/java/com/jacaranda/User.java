@@ -1,4 +1,4 @@
-package com.jacaranda;
+package src.main.java.com.jacaranda;
 
 
 public class User {
