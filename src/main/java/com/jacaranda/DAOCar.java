@@ -1,4 +1,4 @@
-package com.jacaranda;
+package src.main.java.com.jacaranda;
 
 import java.io.File;
 import java.io.IOException;
@@ -90,4 +90,17 @@ public void getCars() throws SQLException {
 		}
 		return bandera;
 	}
+	
+	public static void deleteCar(String id) throws SQLException {
+		Connection connection = DriverManager.getConnection(
+		"jdbc:mysql://localhost:3306/concesionario?useSSL=false", "toor", "toor");
+		
+		Statement statement=connection.createStatement(); 
+		System.out.println("Introduce id para borrar:");
+		
+		statement.executeUpdate("DELETE FROM CAR_DATA WHERE id='"+id+"\';");
+	}
+	
+	
+	
 }
