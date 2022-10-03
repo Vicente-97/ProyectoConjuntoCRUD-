@@ -16,9 +16,8 @@ public class DAOCar {
 		
 	}
 	
-	public void getCars() throws SQLException {
-		Connection connection = DriverManager.getConnection(
-				"jdbc:mysql://localhost:3306/concesionario?useSSL=false", "toor", "toor");
+	public void getCars() throws SQLException, ClassNotFoundException {
+		Connection connection = Conn.getConnection();
 		
 		Statement st = connection.createStatement();
 		ResultSet resultSet = st.executeQuery("select * from CAR_DATA");
@@ -36,45 +35,26 @@ public class DAOCar {
 
 	}
 	
-	public boolean getCar(String idCar) throws SQLException {
-		Connection connection = DriverManager.getConnection(
-				"jdbc:mysql://localhost:3306/concesionario?useSSL=false", "toor", "toor");
-		boolean bandera=false;
-		
+	public Car getCar(String idCar) throws SQLException, ClassNotFoundException {
+		Connection connection = Conn.getConnection();
 		Statement st = connection.createStatement();
-		ResultSet resultSet = st.executeQuery("select id from CAR_DATA where id="+idCar+";");
-		if (resultSet.getString(idCar).isEmpty()) {
-//			Error, no se encuentra el coche///
-		}else {
-			ResultSet result = st.executeQuery("select id from CAR_DATA where id="+idCar+";");
-			bandera=true;
+		
+		ResultSet resultSet = st.executeQuery("select * from CAR_DATA where id= '"+idCar+"';");
+		Car car = null;
+		while (resultSet.next()) {
+		    //Crea el objeto car con la información de la consulta por id. 
+		    //Obteniendo los datos por columnas
+		    car = new Car(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), resultSet.getBoolean(4) , resultSet.getDouble(5), LocalDate.parse(resultSet.getString(6)), resultSet.getString(7) );
 		}
-		return bandera;
+		    
+		return car;
 	}
 	
-	
-//	public static  java.sql.Connection getMySqlConnection( String username, String pass){
-//		try {
-//			Class.forName("com.microsoft.jdbc.sqlserver.SQLServerDriver");
-//			String url = "jdbc:mysql:localhost:3306/concesionario";
-//			Connection conn = DriverManager.getConnection(url, username, pass);
-//			if (conn != null) {
-//				System.out.println("--------> CONNECTED TO SERVER: CONCESIONARIO" );
-//			}else {
-//				System.out.println("--------> UNABLE TO CONNECT TO SERVER: CONCESIONARIO");
-//			}
-//			return conn;
-//		} catch (Exception e) {
-//			System.out.println("ERROR "+ e);
-//			
-//			return null;
-//		}
-//	}
 
-	public void addCar(int model_year, String model_auto, String car_make, boolean availability, double price, LocalDate entry_date, String id) throws SQLException, IOException {
+	public void addCar(int model_year, String model_auto, String car_make, boolean availability, double price, LocalDate entry_date, String id) throws SQLException, IOException, ClassNotFoundException {
 		String linea;
 		
-		Connection connection =  DriverManager.getConnection("jdbc:mysql://localhost:3306/concesionario", "toor", "toor");
+		Connection connection = Conn.getConnection();
 		
 		Statement st =connection.createStatement();
 		ResultSet resulSet =st.executeQuery("Select id from CAR_DATA where id= id;");
@@ -85,23 +65,17 @@ public class DAOCar {
 			//VENTANA DE ERROR QUE YA EXISTE
 		}
 		
-		
-		while (resulSet.next()) {
-			System.out.println((resulSet.getString(1)+ " , " +
-			resulSet.getString(2)+ " , "+ resulSet.getString(3)+ " , "+ resulSet.getString(4)+" ,"+
-			resulSet.getString(5)+ resulSet.getString(6)+ "\n"));			
-						
-			}			
+				
 	}
 	
-	public boolean modifyCar(int model_year, String model_auto, String car_make, boolean availability, double price, LocalDate entry_date, String id) throws SQLException {
+	public boolean updateCar(int model_year, String model_auto, String car_make, boolean availability, double price, LocalDate entry_date, String id) throws SQLException, ClassNotFoundException {
 		
-		Connection connection =  DriverManager.getConnection("jdbc:mysql://localhost:3306/concesionario", "toor", "toor");
+		Connection connection = Conn.getConnection();
 		Statement st =connection.createStatement();
 		
-		if(getCar(id)) {
+		if(getCar(id) != null) {
 			
-			st.executeUpdate("UPDATE CAR_DATA SET model_year = ''");//TO DO
+			st.executeUpdate("UPDATE CAR_DATA SET model_year = '"+ model_year + "', model_auto = '" + model_auto + "', car_make = '" + car_make + "', availability = '" + availability + "', price = '"+ price + "', entry_date='" + entry_date + "', id = '"+ id + "';");//TO DO
 			
 		};
 		return false;
@@ -109,9 +83,8 @@ public class DAOCar {
 	
 	
 	
-	public boolean getUsers(String name, String pass) throws SQLException {
-		Connection connection = DriverManager.getConnection(
-				"jdbc:mysql://localhost:3306/concesionario?useSSL=false", "toor", "toor");
+	public boolean getUsers(String name, String pass) throws SQLException, ClassNotFoundException {
+		Connection connection = Conn.getConnection();
 		boolean bandera=false;
 		
 		Statement st = connection.createStatement();
@@ -125,10 +98,8 @@ public class DAOCar {
 		return bandera;
 	}
 	
-	public static void deleteCar(String id) throws SQLException {
-		Connection connection = DriverManager.getConnection(
-		"jdbc:mysql://localhost:3306/concesionario?useSSL=false", "toor", "toor");
-		
+	public static void deleteCar(String id) throws SQLException, ClassNotFoundException {
+		Connection connection = Conn.getConnection();
 		Statement statement=connection.createStatement(); 
 		System.out.println("Introduce id para borrar:");
 		

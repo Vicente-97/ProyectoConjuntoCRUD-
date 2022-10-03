@@ -1,4 +1,4 @@
-package com.jacaranda;
+package src.main.java.com.jacaranda;
 
 import java.time.LocalDate;
 import java.util.Objects;
