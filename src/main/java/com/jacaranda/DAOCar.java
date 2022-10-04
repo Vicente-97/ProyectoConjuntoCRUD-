@@ -68,17 +68,20 @@ public class DAOCar {
 				
 	}
 	
-	public boolean updateCar(int model_year, String model_auto, String car_make, boolean availability, double price, LocalDate entry_date, String id) throws SQLException, ClassNotFoundException {
+	public boolean updateCar(Car car) throws SQLException, ClassNotFoundException {
 		
 		Connection connection = Conn.getConnection();
 		Statement st =connection.createStatement();
+		boolean result = false;
 		
-		if(getCar(id) != null) {
+		if(getCar(car.getId()) != null) {
 			
-			st.executeUpdate("UPDATE CAR_DATA SET model_year = '"+ model_year + "', model_auto = '" + model_auto + "', car_make = '" + car_make + "', availability = '" + availability + "', price = '"+ price + "', entry_date='" + entry_date + "', id = '"+ id + "';");//TO DO
-			
+			st.executeUpdate("UPDATE CAR_DATA SET model_year = '"+ car.getModelYear() + "', model_auto = '" + car.getModelAuto() + "', car_make = '" + car.getCarMaker() 
+			+ "', availability = '" + car.isAvailability() + "', price = '"+ car.getPrice() + "', entry_date='" + car.getDateEntry() + "', id = '"+ car.getId() 
+			+ "' where id = '"+ car.getId() + "';");
+			result = true;
 		};
-		return false;
+		return result;
 	}
 	
 	
